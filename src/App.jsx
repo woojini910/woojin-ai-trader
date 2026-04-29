@@ -71,8 +71,7 @@ export default function App() {
             padding: 15,
             marginTop: 15,
             borderRadius: 10
-          }}
-        >
+          }}>
           <h3>{stock.name}</h3>
           <p style={{ color: gradeColor(stock.grade), fontWeight: "bold" }}>
             등급: {stock.grade}
