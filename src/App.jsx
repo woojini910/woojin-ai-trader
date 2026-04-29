@@ -16,12 +16,14 @@ export default function App() {
     return (
       <div style={{ padding: 30 }}>
         <h1>우진 AI 트레이더</h1>
+
         <input
           type="password"
           placeholder="비밀번호"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
         <button onClick={login}>로그인</button>
       </div>
     );
