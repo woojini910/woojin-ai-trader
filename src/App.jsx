@@ -65,4 +65,21 @@ export default function App() {
 
       {stocks.map((stock, i) => (
         <div
-          key
+          key={i}
+          style={{
+            border: "1px solid #ddd",
+            padding: 15,
+            marginTop: 15,
+            borderRadius: 10
+          }}
+        >
+          <h3>{stock.name}</h3>
+          <p style={{ color: gradeColor(stock.grade), fontWeight: "bold" }}>
+            등급: {stock.grade}
+          </p>
+          <p>순매수 금액: {stock.buy.toLocaleString()}원</p>
+        </div>
+      ))}
+    </div>
+  );
+}
