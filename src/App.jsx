@@ -1,27 +1,3 @@
-수출 체납 기능. 앱.() {
-돌아가다 (
-<div 스타일={{
-배경: "#000",
-color:"#d4af37",
-최소 높이:"100vh",
-패딩: "30 px",
-폰트 패밀리:"아리알
-}}>
-<h1>우진 AI 트레이더 PRO 🔒</h1>
-<p>배포 성공했습니다.</p>
-<p>실시간 주식 분석 시스템 준비 완료</p>
+import { useState, useEffect } from "react";
 
- <div 스타일={{
- 경계: "1px 고체 #d4af37",
- 패딩: "15 px",
- 여백 상단: "20px"
-  }}>
- <h3>오늘 강한 종목</h3>
- <p>대원전선 SSS</p>
- <p>현대차 SSA</p>
- <p>삼성전기 SAB</p>
- </div>
-</div>
-
-);
-}
+export default function App() {
