@@ -16,13 +16,18 @@ export default function App() {
     return (
       <div style={{ padding: 30 }}>
         <h1>우진 AI 트레이더</h1>
+
         <input
           type="password"
           placeholder="비밀번호"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          style={{ padding: 10, marginRight: 10 }}
         />
-        <button onClick={login}>로그인</button>
+
+        <button onClick={login} style={{ padding: 10 }}>
+          로그인
+        </button>
       </div>
     );
   }
@@ -42,6 +47,12 @@ export default function App() {
         <h3>현대차</h3>
         <p>등급: A</p>
         <p>순매수 금액: 95억원</p>
+      </div>
+
+      <div style={{ border: "1px solid #ddd", padding: 15, marginTop: 10 }}>
+        <h3>삼성SDI</h3>
+        <p>등급: B+</p>
+        <p>순매수 금액: 61억원</p>
       </div>
     </div>
   );
