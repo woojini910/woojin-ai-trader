@@ -1,54 +1,44 @@
-import React, { useState } from 'react'
+import { useState } from "react";
 
 function App() {
-  const [stock, setStock] = useState('')
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [stock, setStock] = useState("");
+  const [result, setResult] = useState("");
 
-  const analyze = async () => {
-    if (!stock) return
-    setLoading(true)
+  const analyzeStock = async () => {
+    setResult("분석중...");
 
-    const res = await fetch(`/api/analyze?stock=${stock}`)
-    const result = await res.json()
+    try {
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ stock })
+      });
 
-    setData(result)
-    setLoading(false)
-  }
+      const data = await res.json();
+      setResult(data.result);
+
+    } catch (error) {
+      setResult("에러 발생");
+    }
+  };
 
   return (
-    <div style={{ padding: '40px' }}>
+    <div style={{ padding: "20px" }}>
       <h1>📊 우진 AI 트레이더</h1>
 
       <input
-        placeholder="종목 입력"
         value={stock}
         onChange={(e) => setStock(e.target.value)}
+        placeholder="종목 입력 (예: 삼성전자)"
       />
-      <button onClick={analyze}>분석</button>
 
-      {loading && <p>분석중...</p>}
+      <button onClick={analyzeStock}>분석</button>
 
-      {data && (
-        <div style={{ marginTop: '20px' }}>
-          <h2>{stock}</h2>
-          <p>💰 가격: {data.price}</p>
-          <p>📊 점수: {data.score}/100</p>
-          <p>🧠 AI 분석: {data.ai}</p>
-
-          <h3>📰 뉴스</h3>
-          <ul>
-            {data.news.map((n, i) => (
-              <li key={i}>{n}</li>
-            ))}
-          </ul>
-
-          <h3>📈 차트</h3>
-          <img src={data.chart} width="400" />
-        </div>
-      )}
+      <p>{result}</p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
