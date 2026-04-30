@@ -1,3 +1,4 @@
+console.log("KEY:", process.env.OPENAI_API_KEY);
 export default async function handler(req, res) {
   try {
     const { stock } = req.body;
