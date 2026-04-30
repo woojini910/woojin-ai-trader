@@ -9,14 +9,10 @@ function App() {
     if (!stock) return
     setLoading(true)
 
-    try {
-      const res = await fetch(`/api/analyze?stock=${stock}`)
-      const result = await res.json()
-      setData(result)
-    } catch (e) {
-      alert('에러 발생')
-    }
+    const res = await fetch(`/api/analyze?stock=${stock}`)
+    const result = await res.json()
 
+    setData(result)
     setLoading(false)
   }
 
@@ -25,28 +21,30 @@ function App() {
       <h1>📊 우진 AI 트레이더</h1>
 
       <input
-        placeholder="종목 입력 (삼성전자, Tesla 등)"
+        placeholder="종목 입력"
         value={stock}
         onChange={(e) => setStock(e.target.value)}
       />
-
-      <button onClick={analyze}>
-        분석
-      </button>
+      <button onClick={analyze}>분석</button>
 
       {loading && <p>분석중...</p>}
 
       {data && (
         <div style={{ marginTop: '20px' }}>
+          <h2>{stock}</h2>
           <p>💰 가격: {data.price}</p>
           <p>📊 점수: {data.score}/100</p>
           <p>🧠 AI 분석: {data.ai}</p>
-          <p>📰 뉴스:</p>
+
+          <h3>📰 뉴스</h3>
           <ul>
             {data.news.map((n, i) => (
               <li key={i}>{n}</li>
             ))}
           </ul>
+
+          <h3>📈 차트</h3>
+          <img src={data.chart} width="400" />
         </div>
       )}
     </div>
