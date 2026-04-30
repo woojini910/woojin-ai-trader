@@ -1,8 +1,9 @@
+import React from 'react'
+
 function App() {
   return (
-    <div>
-      <h1>우진 AI 트레이더</h1>
-      <p>배포 성공!</p>
+    <div style={{ padding: '40px', fontSize: '24px' }}>
+      🚀 우진 AI 트레이더 정상 작동
     </div>
   )
 }
