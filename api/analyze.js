@@ -13,13 +13,28 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "user",
-            content: `${stock} 주식 전망 분석해줘. 매수/매도 의견 포함해서`
+            content: `${stock} 주식 전망 분석해줘. 매수/매도 포함`
           }
         ]
       })
     });
 
-    const data = await response.json();
+    const text = await response.text(); // 🔥 핵심
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      return res.status(500).json({
+        result: "OpenAI 응답 에러: " + text
+      });
+    }
+
+    if (!response.ok) {
+      return res.status(500).json({
+        result: "OpenAI 오류: " + JSON.stringify(data)
+      });
+    }
 
     res.status(200).json({
       result: data.choices?.[0]?.message?.content || "분석 실패"
@@ -27,6 +42,6 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ result: "에러 발생" });
+    res.status(500).json({ result: "서버 에러 발생" });
   }
 }
