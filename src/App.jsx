@@ -2,54 +2,78 @@ import React, { useState } from 'react'
 
 function App() {
   const [stock, setStock] = useState('')
-  const [result, setResult] = useState('')
+  const [price, setPrice] = useState(null)
+  const [news, setNews] = useState([])
+  const [signal, setSignal] = useState('')
 
-  const analyzeStock = () => {
-    if (!stock) {
-      setResult('종목명을 입력하세요')
-      return
+  // 🔥 1️⃣ 주가 가져오기 (야후 API 우회)
+  const getStockPrice = async (symbol) => {
+    try {
+      const res = await fetch(
+        `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}`
+      )
+      const data = await res.json()
+      return data.quoteResponse.result[0]?.regularMarketPrice
+    } catch (e) {
+      return null
     }
+  }
 
-    // 🔥 임시 AI 분석 로직 (나중에 API로 교체)
-    if (stock.includes('삼성')) {
-      setResult('📈 상승 가능성 높음 (AI 분석)')
-    } else if (stock.includes('현대')) {
-      setResult('⚖️ 횡보 예상')
+  // 🔥 2️⃣ 뉴스 가져오기 (간단 RSS)
+  const getNews = async (keyword) => {
+    try {
+      const res = await fetch(
+        `https://api.allorigins.win/raw?url=https://news.google.com/rss/search?q=${keyword}`
+      )
+      const text = await res.text()
+      return text.slice(0, 300) // 간단 표시용
+    } catch {
+      return '뉴스 불러오기 실패'
+    }
+  }
+
+  // 🔥 3️⃣ 분석
+  const analyze = async () => {
+    if (!stock) return
+
+    // 종목 코드 간단 매핑
+    let symbol = 'AAPL'
+    if (stock.includes('삼성')) symbol = '005930.KS'
+    if (stock.includes('현대')) symbol = '005380.KS'
+
+    const p = await getStockPrice(symbol)
+    setPrice(p)
+
+    const n = await getNews(stock)
+    setNews(n)
+
+    // 🔥 간단 AI 느낌 분석
+    if (p > 70000) {
+      setSignal('📈 매수 우세')
+    } else if (p > 50000) {
+      setSignal('⚖️ 중립')
     } else {
-      setResult('📉 변동성 높음 (주의)')
+      setSignal('📉 매도 우세')
     }
   }
 
   return (
-    <div style={{ padding: '40px', fontFamily: 'sans-serif' }}>
+    <div style={{ padding: '40px' }}>
       <h1>📊 우진 AI 트레이더</h1>
 
       <input
-        type="text"
-        placeholder="종목 입력 (예: 삼성전자)"
+        placeholder="종목 입력 (삼성전자)"
         value={stock}
         onChange={(e) => setStock(e.target.value)}
-        style={{
-          padding: '10px',
-          fontSize: '16px',
-          width: '250px',
-          marginRight: '10px'
-        }}
       />
 
-      <button
-        onClick={analyzeStock}
-        style={{
-          padding: '10px 20px',
-          fontSize: '16px',
-          cursor: 'pointer'
-        }}
-      >
-        분석하기
-      </button>
+      <button onClick={analyze}>분석</button>
 
-      <div style={{ marginTop: '30px', fontSize: '20px' }}>
-        {result}
+      <div style={{ marginTop: '20px' }}>
+        <p>💰 현재가: {price || '-'}</p>
+        <p>🧠 AI 신호: {signal}</p>
+        <p>📰 뉴스 요약:</p>
+        <div style={{ fontSize: '12px' }}>{news}</div>
       </div>
     </div>
   )
