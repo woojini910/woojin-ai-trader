@@ -4,7 +4,7 @@ function App() {
   const [stock, setStock] = useState("");
   const [result, setResult] = useState("");
 
-  const analyzeStock = async () => {
+  const analyze = async () => {
     setResult("분석중...");
 
     try {
@@ -19,22 +19,22 @@ function App() {
       const data = await res.json();
       setResult(data.result);
 
-    } catch (error) {
-      setResult("에러 발생");
+    } catch (e) {
+      setResult("API 에러");
     }
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: 30 }}>
       <h1>📊 우진 AI 트레이더</h1>
 
       <input
         value={stock}
         onChange={(e) => setStock(e.target.value)}
-        placeholder="종목 입력 (예: 삼성전자)"
+        placeholder="종목 입력"
       />
 
-      <button onClick={analyzeStock}>분석</button>
+      <button onClick={analyze}>분석</button>
 
       <p>{result}</p>
     </div>
